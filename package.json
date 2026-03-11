@@ -14,7 +14,9 @@
     "three": "^0.160.0",
     "@react-three/fiber": "^8.15.11",
     "@react-three/drei": "^9.88.11",
-    "lucide-react": "^0.294.0"
+    "lucide-react": "^0.294.0",
+    "@mediapipe/hands": "latest",
+    "@mediapipe/camera_utils": "latest"
   },
   "devDependencies": {
     "@types/react": "^18.2.37",
