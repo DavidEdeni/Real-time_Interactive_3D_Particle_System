@@ -3,12 +3,12 @@ import { OrbitControls } from '@react-three/drei'
 import { Suspense, useState } from 'react'
 import ParticleSystem from './components/ParticleSystem'
 import Overlay from './components/Overlay'
-import { useHandTracking } from './hooks/useHandTracking'
 
 export default function App() {
   const [preset, setPreset] = useState<string>('heart')
   const [color, setColor] = useState('#00ff88')
-  const { tension, isDetecting, videoRef } = useHandTracking()
+  const [shapeSize, setShapeSize] = useState<number>(1.0)
+  const [particleSize, setParticleSize] = useState<number>(0.1)
 
   return (
     <div style={{ width: '100%', height: '100%', background: '#050505' }}>
@@ -19,7 +19,12 @@ export default function App() {
       >
         <color attach="background" args={['#050505']} />
         <Suspense fallback={null}>
-          <ParticleSystem preset={preset} tension={tension} color={color} />
+          <ParticleSystem 
+            preset={preset} 
+            shapeSize={shapeSize} 
+            particleSize={particleSize} 
+            color={color} 
+          />
         </Suspense>
         <OrbitControls 
           enableZoom={true} 
@@ -34,9 +39,10 @@ export default function App() {
         onPresetChange={setPreset}
         currentColor={color}
         onColorChange={setColor}
-        tension={tension}
-        isDetecting={isDetecting}
-        videoRef={videoRef}
+        shapeSize={shapeSize}
+        onShapeSizeChange={setShapeSize}
+        particleSize={particleSize}
+        onParticleSizeChange={setParticleSize}
       />
     </div>
   )

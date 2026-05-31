@@ -1,13 +1,14 @@
-import { Github, Info, MousePointer2, Camera, Palette } from 'lucide-react'
+import { Github, Info, MousePointer2, Palette, Sliders } from 'lucide-react'
 
 interface OverlayProps {
   currentPreset: string
   onPresetChange: (preset: string) => void
   currentColor: string
   onColorChange: (color: string) => void
-  tension: number
-  isDetecting: boolean
-  videoRef: React.RefObject<HTMLVideoElement>
+  shapeSize: number
+  onShapeSizeChange: (size: number) => void
+  particleSize: number
+  onParticleSizeChange: (size: number) => void
 }
 
 export default function Overlay({ 
@@ -15,9 +16,10 @@ export default function Overlay({
   onPresetChange, 
   currentColor, 
   onColorChange, 
-  tension, 
-  isDetecting, 
-  videoRef 
+  shapeSize, 
+  onShapeSizeChange, 
+  particleSize, 
+  onParticleSizeChange
 }: OverlayProps) {
   const presets = ['heart', 'flower', 'saturn', 'buddha', 'fireworks', 'sphere']
 
@@ -27,7 +29,7 @@ export default function Overlay({
         <div className="glass-panel" style={{ width: '320px' }}>
           <h1>Particle Entropy</h1>
           <p className="info-text">
-            Use AI-powered hand gestures or buttons to reshape the simulation.
+            Use the controls and presets to transform the 3D particle system.
           </p>
           
           <div className="control-group" style={{ marginTop: '20px' }}>
@@ -67,58 +69,63 @@ export default function Overlay({
               }}
             />
           </div>
+
+          <div className="control-group" style={{ marginTop: '20px' }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '8px' }}>
+              <Sliders size={14} color="var(--accent-cyan)" />
+              <span style={{ fontSize: '0.75rem', color: 'rgba(255,255,255,0.5)' }}>
+                SHAPE SCALE ({shapeSize.toFixed(2)}x)
+              </span>
+            </div>
+            <input 
+              type="range" 
+              min="0.1" 
+              max="2.5" 
+              step="0.05"
+              value={shapeSize} 
+              onChange={(e) => onShapeSizeChange(parseFloat(e.target.value))}
+              style={{ 
+                width: '100%', 
+                accentColor: 'var(--accent-cyan)',
+                cursor: 'pointer'
+              }}
+            />
+          </div>
+
+          <div className="control-group" style={{ marginTop: '20px' }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '8px' }}>
+              <Sliders size={14} color="var(--accent-magenta)" />
+              <span style={{ fontSize: '0.75rem', color: 'rgba(255,255,255,0.5)' }}>
+                PARTICLE SIZE ({particleSize.toFixed(2)})
+              </span>
+            </div>
+            <input 
+              type="range" 
+              min="0.01" 
+              max="0.5" 
+              step="0.01"
+              value={particleSize} 
+              onChange={(e) => onParticleSizeChange(parseFloat(e.target.value))}
+              style={{ 
+                width: '100%', 
+                accentColor: 'var(--accent-magenta)',
+                cursor: 'pointer'
+              }}
+            />
+          </div>
         </div>
       </div>
 
       <div className="footer animate-fade-in">
         <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
-          <div className="glass-panel" style={{ 
-            width: '180px', 
-            height: '135px', 
-            padding: '4px', 
-            overflow: 'hidden',
-            position: 'relative'
-          }}>
-            <video 
-              ref={videoRef} 
-              style={{ 
-                width: '100%', 
-                height: '100%', 
-                objectFit: 'cover', 
-                borderRadius: '12px',
-                transform: 'scaleX(-1)'
-              }} 
-            />
-            <div style={{ 
-              position: 'absolute', 
-              bottom: '8px', 
-              left: '8px', 
-              background: 'rgba(0,0,0,0.6)', 
-              padding: '2px 8px', 
-              borderRadius: '4px',
-              fontSize: '10px',
-              display: 'flex',
-              alignItems: 'center',
-              gap: '4px'
-            }}>
-              <div style={{ 
-                width: '6px', 
-                height: '6px', 
-                borderRadius: '50%', 
-                background: isDetecting ? 'var(--accent-cyan)' : '#ff4444' 
-              }} />
-              {isDetecting ? `TRACKING: ${(tension * 100).toFixed(0)}%` : 'NO HAND'}
-            </div>
-          </div>
-
           <div className="glass-panel" style={{ display: 'flex', gap: '24px', alignItems: 'center' }}>
             <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-              <Camera size={16} color="var(--accent-cyan)" />
-              <span style={{ fontSize: '0.75rem', fontWeight: 600 }}>FIST TO CONTRACT</span>
+              <MousePointer2 size={16} color="var(--accent-cyan)" />
+              <span style={{ fontSize: '0.75rem', fontWeight: 600 }}>DRAG TO ROTATE / SCROLL TO ZOOM</span>
             </div>
             <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
               <Info size={16} color="var(--accent-magenta)" />
-              <span style={{ fontSize: '0.75rem', fontWeight: 600 }}>MEDIA PIPE AI</span>
+              <span style={{ fontSize: '0.75rem', fontWeight: 600 }}>INTERACTIVE 3D PARTICLES</span>
             </div>
           </div>
         </div>

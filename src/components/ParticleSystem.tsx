@@ -4,17 +4,18 @@ import * as THREE from 'three'
 
 interface ParticleSystemProps {
   preset: string;
-  tension: number;
+  shapeSize: number;
+  particleSize: number;
   color: string;
 }
 
 const PARTICLE_COUNT = 15000;
 
-export default function ParticleSystem({ preset, tension, color }: ParticleSystemProps) {
+export default function ParticleSystem({ preset, shapeSize, particleSize, color }: ParticleSystemProps) {
   const points = useRef<THREE.Points>(null!)
   const { mouse, viewport } = useThree()
   const targetColor = useMemo(() => new THREE.Color(color), [color])
-
+  
   const shapes = useMemo(() => {
     const getPointOnSphere = (r = 10) => {
       const u = Math.random();
@@ -119,7 +120,7 @@ export default function ParticleSystem({ preset, tension, color }: ParticleSyste
   useFrame((state) => {
     const pos = points.current.geometry.attributes.position.array as Float32Array;
     const lerpFactor = 0.08;
-    const finalScale = 1.0 - tension * 0.8;
+    const finalScale = shapeSize;
 
     for (let i = 0; i < PARTICLE_COUNT; i++) {
       const i3 = i * 3;
@@ -147,7 +148,7 @@ export default function ParticleSystem({ preset, tension, color }: ParticleSyste
         />
       </bufferGeometry>
       <pointsMaterial
-        size={0.1}
+        size={particleSize}
         color={color}
         transparent
         opacity={0.8}
